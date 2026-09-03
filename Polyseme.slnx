@@ -1,0 +1,7 @@
+<Solution>
+  <Folder Name="/Solution Items/">
+    <File Path=".editorconfig" />
+  </Folder>
+  <Project Path="Polyseme.Core/Polyseme.Core.csproj" />
+  <Project Path="Polyseme.Sandbox/Polyseme.Sandbox.csproj" />
+</Solution>

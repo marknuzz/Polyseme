@@ -1,0 +1,75 @@
+@prefix poly: <http://example.org/polyseme#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix rdf:  <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
+@prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
+@prefix sh:   <http://www.w3.org/ns/shacl#> .
+
+#
+# Ontology
+#
+
+poly:InformationDerivation
+    a rdfs:Class ;
+    rdfs:subClassOf prov:Derivation ;
+    rdfs:label "Information derivation" .
+
+poly:PreservationStatus
+    a rdfs:Class ;
+    rdfs:label "Preservation status" .
+
+poly:Lossless
+    a poly:PreservationStatus ;
+    rdfs:label "Lossless" .
+
+poly:Lossy
+    a poly:PreservationStatus ;
+    rdfs:label "Lossy" .
+
+poly:Unknown
+    a poly:PreservationStatus ;
+    rdfs:label "Unknown" .
+
+poly:preservationStatus
+    a rdf:Property ;
+    rdfs:domain poly:InformationDerivation ;
+    rdfs:range poly:PreservationStatus ;
+    rdfs:label "preservation status" .
+
+#
+# SHACL
+#
+
+poly:InformationDerivationShape
+    a sh:NodeShape ;
+    sh:targetClass poly:InformationDerivation ;
+
+    # Exactly one source entity.
+    sh:property [
+        sh:path prov:entity ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class prov:Entity
+    ] ;
+
+    # Exactly one resulting entity must point to this derivation.
+    sh:property [
+        sh:path [ sh:inversePath prov:qualifiedDerivation ] ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:class prov:Entity
+    ] ;
+
+    # Exactly one preservation classification.
+    sh:property [
+        sh:path poly:preservationStatus ;
+        sh:minCount 1 ;
+        sh:maxCount 1 ;
+        sh:in (poly:Lossless poly:Lossy poly:Unknown)
+    ] ;
+
+    # Activity is optional, but there may be at most one.
+    sh:property [
+        sh:path prov:hadActivity ;
+        sh:maxCount 1 ;
+        sh:class prov:Activity
+    ] .

@@ -1,0 +1,22 @@
+@prefix prov: <http://www.w3.org/ns/prov#> .
+@prefix poly: <http://example.org/polyseme#> .
+
+{
+    ?result prov:qualifiedDerivation ?derivation .
+    ?derivation prov:entity ?source .
+    ?derivation poly:preservationStatus poly:Lossless .
+}
+=>
+{
+    ?result poly:losslesslyDerivedFrom ?source .
+} .
+
+{
+    ?a poly:losslesslyDerivedFrom ?b .
+    ?b poly:losslesslyDerivedFrom ?c .
+}
+=>
+{
+    ?a poly:losslesslyDerivedFrom ?c .
+} .
+

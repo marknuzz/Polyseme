@@ -1,0 +1,61 @@
+@prefix ex:   <http://example.org/> .
+@prefix poly: <http://example.org/polyseme#> .
+@prefix prov: <http://www.w3.org/ns/prov#> .
+
+ex:compressedFile
+    a prov:Entity ;
+    prov:qualifiedDerivation ex:gzipDerivation .
+
+ex:originalFile
+    a prov:Entity .
+
+ex:gzipDerivation
+    a poly:InformationDerivation ;
+    prov:entity ex:originalFile ;
+    poly:preservationStatus poly:Lossless .
+
+ex:hash
+    a prov:Entity ;
+    prov:qualifiedDerivation ex:hashDerivation .
+
+ex:hashDerivation
+    a poly:InformationDerivation ;
+    prov:entity ex:originalFile ;
+    poly:preservationStatus poly:Lossy .
+
+
+ex:base64File
+    a prov:Entity ;
+    prov:qualifiedDerivation ex:base64Derivation .
+
+ex:base64Derivation
+    a poly:InformationDerivation ;
+    prov:entity ex:compressedFile ;
+    poly:preservationStatus poly:Lossless .
+
+ex:compressedHash
+    a prov:Entity ;
+    prov:qualifiedDerivation ex:compressedHashDerivation .
+
+ex:compressedHashDerivation
+    a poly:InformationDerivation ;
+    prov:entity ex:compressedFile ;
+    poly:preservationStatus poly:Lossy .
+
+ex:wrappedFile
+    a prov:Entity ;
+    prov:qualifiedDerivation ex:wrapDerivation .
+
+ex:wrapDerivation
+    a poly:InformationDerivation ;
+    prov:entity ex:base64File ;
+    poly:preservationStatus poly:Lossless .
+
+ex:encodedHash
+    a prov:Entity ;
+    prov:qualifiedDerivation ex:encodeHashDerivation .
+
+ex:encodeHashDerivation
+    a poly:InformationDerivation ;
+    prov:entity ex:compressedHash ;
+    poly:preservationStatus poly:Lossless .
