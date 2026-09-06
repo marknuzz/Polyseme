@@ -19,6 +19,11 @@ public abstract class GraphTestBase
 
     protected Triple Triple(string subject, string predicate, string obj)
         => TestHelpers.Triple(Core.Data, subject, predicate, obj);
+
+    protected void AssertEntity(string qname, EntityRef actual)
+        => Assert.Equal(Core.Data.CreateUriNode(qname).Uri, actual.Uri);
+
+    protected EntityRef Entity(string qname) => EntityRef.FromQName(Core.Data, qname);
 }
 
 public abstract class GraphTest : GraphTestBase
