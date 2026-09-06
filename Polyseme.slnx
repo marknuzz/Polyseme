@@ -2,6 +2,7 @@
   <Folder Name="/Solution Items/">
     <File Path=".editorconfig" />
   </Folder>
+  <Project Path="Polyseme.Core.Tests/Polyseme.Core.Tests.csproj" />
   <Project Path="Polyseme.Core/Polyseme.Core.csproj" />
   <Project Path="Polyseme.Sandbox/Polyseme.Sandbox.csproj" />
 </Solution>
