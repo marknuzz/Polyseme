@@ -8,28 +8,44 @@ using Graph = VDS.RDF.Graph;
 
 namespace Polyseme.Core
 {
-    public sealed class CoreGraph
+    public interface ICoreGraph
     {
-        public Graph Schema { get; } = new Graph();
-        public Graph Data { get; } = new Graph();
-        public Graph Rules { get; } = new Graph();
+        IGraph Schema { get; }
+        IGraph Data { get; }
+        IGraph Rules { get; }
+
+        IReadOnlyList<Triple> RdfsInferredTriples { get; }
+        IReadOnlyList<Triple> RuleInferredTriples { get; }
+    }
+
+    public sealed class CoreGraph : ICoreGraph
+    {
+        public PolysemeGraph Schema { get; } = new PolysemeGraph();
+        public PolysemeGraph Data { get; } = new PolysemeGraph();
+        public PolysemeGraph Rules { get; } = new PolysemeGraph();
+
         public ImmutableList<Triple> RdfsInferredTriples { get; private set; } = [];
         public ImmutableList<Triple> RuleInferredTriples { get; private set; } = [];
 
+        #region ICoreGraph
+
+        IGraph ICoreGraph.Schema => Schema;
+        IGraph ICoreGraph.Data => Data;
+        IGraph ICoreGraph.Rules => Rules;
+        IReadOnlyList<Triple> ICoreGraph.RdfsInferredTriples => RdfsInferredTriples;
+
+        IReadOnlyList<Triple> ICoreGraph.RuleInferredTriples => RuleInferredTriples;
+
+        #endregion
+
         private static ITripleFormatter TripleFormatter { get; }
+
         private CoreGraph() { }
 
         static CoreGraph()
         {
-            string rdf = "http://www.w3.org/1999/02/22-rdf-syntax-ns#";
-            string rdfs = "http://www.w3.org/2000/01/rdf-schema#";
             var namespaces = new NamespaceMapper();
-            namespaces.AddNamespace("ex", new Uri("http://example.org/"));
-            namespaces.AddNamespace("poly", new Uri("http://example.org/polyseme#"));
-            namespaces.AddNamespace("prov", new Uri("http://www.w3.org/ns/prov#"));
-            namespaces.AddNamespace("rdf", new Uri(rdf));
-            namespaces.AddNamespace("rdfs", new Uri(rdfs));
-
+            PolysemeGraph.PopulateNamespaces(namespaces);
             TripleFormatter = new TurtleFormatter(namespaces);
         }
 
